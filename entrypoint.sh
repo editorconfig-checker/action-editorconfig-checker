@@ -1,5 +1,4 @@
 #!/bin/sh -l
 
-echo "Hello $1"
-time=$(date)
-echo ::set-output name=time::$time
+output=$(ec)
+echo ::set-output name=output::$output
