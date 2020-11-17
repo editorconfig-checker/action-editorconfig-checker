@@ -8,7 +8,7 @@ out=$(docker run --rm -v "$PWD/test-cases/invalid-testfiles":/check system-under
 exit=$?
 
 assert "$exit" "1"
-assert_contains "$out" "./wrong-indentation-type.md:"
+assert_contains "$out" "wrong-indentation-type.md:"
 
 # check valid run
 out=$(docker run --rm -v "$PWD/test-cases/valid-testfiles":/check system-under-test)
