@@ -15,5 +15,5 @@ Output of editorconfig-checker
 ## Example usage
 
 ```yaml
-uses: editorconfig-checker/action-editorconfig-checker@main
+uses: editorconfig-checker/action-editorconfig-checker@v1
 ```
