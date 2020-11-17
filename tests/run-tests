@@ -1,0 +1,20 @@
+#!/bin/bash
+source ./tools/assert.sh
+
+docker build --tag system-under-test ../src/ &> /dev/null
+
+# checking invalid run
+out=$(docker run --rm -v "$PWD/test-cases/invalid-testfiles":/check system-under-test)
+exit=$?
+
+assert "$exit" "1"
+assert_contains "$out" "wrong-indentation-type.md:"
+
+# check valid run
+out=$(docker run --rm -v "$PWD/test-cases/valid-testfiles":/check system-under-test)
+exit=$?
+
+assert "$exit" "0"
+assert "$out" "\n::set-output name=output::"
+
+assert_end
