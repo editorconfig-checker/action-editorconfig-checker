@@ -1,19 +1,44 @@
-# editorconfig-checker action
+# Setup EditorConfig Action
 
-This action uses [editorconfig/editorconfig](https://github.com/editorconfig-checker/editorconfig-checker#usage) to validate files.
+This action uses [editorconfig-checker][usage] to validate files.
 
-## Inputs
+[usage]: https://github.com/editorconfig-checker/editorconfig-checker#usage
 
-There are currently no inputs available.
+## Usage
 
-## Outputs
+### Pre-requisites
 
-### `output`
+Create a workflow `.yml` file in your repositories `.github/workflows` directory.
+An [example workflow](#example-workflow) is available below.
+For more information, reference the GitHub Help Documentation for [Creating a workflow file][creating-a-workflow-file].
 
-Output of editorconfig-checker
+[creating-a-workflow-file]: https://help.github.com/en/articles/configuring-a-workflow#creating-a-workflow-file
 
-## Example usage
+### Inputs
+
+| Field     | Description                 |
+| --------- | --------------------------- |
+| `version` | Version (default: `latest`) |
+
+### Example workflow
 
 ```yaml
-uses: editorconfig-checker/action-editorconfig-checker@v1
+name: EditorConfig Checker
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  editorconfig:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: editorconfig-checker/action-editorconfig-checker@main
+      - run: editorconfig-checker
 ```
+
+## License
+
+[MIT LICENSE](LICENSE)

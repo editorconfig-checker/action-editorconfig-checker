@@ -1,0 +1,17 @@
+{
+  "name": "editorconfig-action",
+  "private": true,
+  "scripts": {
+    "start": "ncc build src/index.ts --minify"
+  },
+  "dependencies": {
+    "@actions/core": "^1.6.0",
+    "@actions/github": "^5.0.0",
+    "@actions/tool-cache": "^1.7.1"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.21",
+    "@vercel/ncc": "^0.33.3",
+    "typescript": "^4.5.5"
+  }
+}

@@ -1,19 +1,26 @@
-name: "ci"
+name: ci
 
-on: [push]
+on:
+  push:
 
 jobs:
-  ci:
-    runs-on: ubuntu-latest
+  dirty:
+    runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v2
-      - uses: editorconfig-checker/action-editorconfig-checker@main
-
-  tests:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Run tests
+      - uses: actions/setup-node@v2
+      - run: npm ci
+      - run: npm start
+      - name: Compare the expected and actual dist/ directories
         run: |
-          cd tests
-          DEBUG=1 ./run-tests
+          if [ "$(git diff --ignore-space-at-eol dist/ | wc -l)" -gt "0" ]; then
+            echo "Detected uncommitted changes after build.  See status below:"
+            git diff
+            exit 1
+          fi
+  test:
+    runs-on: ubuntu-20.04
+    needs: [dirty]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./
