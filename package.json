@@ -10,7 +10,7 @@
     "@actions/tool-cache": "^2.0.1"
   },
   "devDependencies": {
-    "@types/node": "^20.7.1",
+    "@types/node": "^20.8.0",
     "@vercel/ncc": "^0.38.0",
     "typescript": "^5.2.2"
   }
