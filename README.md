@@ -34,7 +34,7 @@ jobs:
   editorconfig:
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - uses: editorconfig-checker/action-editorconfig-checker@main
       - run: editorconfig-checker
 ```
