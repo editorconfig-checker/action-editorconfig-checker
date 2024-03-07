@@ -7,8 +7,8 @@ jobs:
   dirty:
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
       - run: npm ci
       - run: npm start
       - name: Compare the expected and actual dist/ directories
@@ -22,5 +22,5 @@ jobs:
     runs-on: ubuntu-20.04
     needs: [dirty]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - uses: ./
