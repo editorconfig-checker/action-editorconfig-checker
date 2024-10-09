@@ -1,11 +1,12 @@
 import { addPath, info, setFailed } from '@actions/core'
 import { downloadTool, extractTar } from '@actions/tool-cache'
 import fs from 'node:fs/promises'
+import os from "node:os"
 import path from 'node:path'
 import { findRelease } from './release'
 import { checkerName, version } from './shared'
 
-const WORKING_DIR = path.join(process.env.HOME ?? "/tmp", 'editorconfig-checker')
+const WORKING_DIR = path.join(os.homedir(), 'editorconfig-checker')
 
 async function main() {
   info(`Find '${version}' release`)
