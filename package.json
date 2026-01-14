@@ -13,5 +13,8 @@
     "@types/node": "^25.0.8",
     "@vercel/ncc": "^0.38.4",
     "typescript": "^5.9.3"
+  },
+  "engines": {
+    "node": ">=24"
   }
 }
