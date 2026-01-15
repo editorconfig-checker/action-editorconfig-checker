@@ -32,11 +32,16 @@ on:
 
 jobs:
   editorconfig:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: editorconfig-checker/action-editorconfig-checker@main
-      - run: editorconfig-checker
+      - name: Check out code
+        uses: actions/checkout@v6
+
+      - name: Set up editorconfig-checker
+        uses: editorconfig-checker/action-editorconfig-checker@main
+
+      - name: Run editorconfig-checker
+        run: editorconfig-checker
 ```
 
 ## License
