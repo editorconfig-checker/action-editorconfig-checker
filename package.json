@@ -5,7 +5,7 @@
     "start": "ncc build src/index.ts --minify"
   },
   "dependencies": {
-    "@actions/core": "^2.0.1",
+    "@actions/core": "^2.0.3",
     "@actions/github": "^7.0.0",
     "@actions/tool-cache": "^3.0.1"
   },
