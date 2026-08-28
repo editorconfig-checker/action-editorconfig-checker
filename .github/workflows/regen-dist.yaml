@@ -6,6 +6,7 @@ on:
       - package*.json
       - tsconfig.json
       - src/**
+      - .github/workflows/regen-dist.yaml
   push:
     branches:
       - main
@@ -32,5 +33,3 @@ jobs:
       - uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: regenerate dist
-          
-              
