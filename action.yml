@@ -9,7 +9,7 @@ inputs:
     required: true
   version:
     description: EditorConfig Checker Version
-    default: latest
+    default: v3.11.3
     required: true
 
 runs:
