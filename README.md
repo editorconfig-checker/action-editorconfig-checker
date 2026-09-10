@@ -16,15 +16,45 @@ For more information, reference the GitHub Help Documentation for [Creating a wo
 
 ### Inputs
 
-| Field          | Description                                                                    |
-| -------------- | ------------------------------------------------------------------------------ |
-| `version`      | editorconfig-checker version to install (default: `v4.0.1`)                    |
-| `github-token` | Token used to look up the release to download (default: `${{ github.token }}`) |
+| Field              | Description                                                                    |
+| ------------------ | ------------------------------------------------------------------------------ |
+| `version`          | editorconfig-checker version to install (default: `v4.0.1`)                    |
+| `github-token`     | Token used to look up the release to download (default: `${{ github.token }}`) |
+| `allow-unverified` | Install a release that cannot be verified (default: `false`)                   |
+
 
 The `version` default is a pinned tag rather than `latest`, so that pinning this
 action to a commit SHA also pins the editorconfig-checker binary it installs.
 Set `version: latest` to opt back into always installing the newest release,
 at the cost of the installed binary no longer being determined by your pin.
+
+### Verification
+
+The downloaded archive is verified against the [GitHub release attestation][attestations]
+for the release it came from, before it is extracted or made executable. The
+action resolves the release tag, asks the GitHub CLI to verify the signed
+attestation for that tag, and checks that the digest the attestation records
+*for that asset name* matches the archive on disk. A mismatch fails the step.
+
+editorconfig-checker publishes release attestations from `v3.9.0` onwards.
+Installing `v3.8.0` or older, or running on a runner without the GitHub CLI,
+therefore fails unless you opt in:
+
+```yaml
+- uses: editorconfig-checker/action-editorconfig-checker@main
+  with:
+    version: v3.7.0
+    allow-unverified: true
+```
+
+`allow-unverified` only permits installing a release that *cannot* be verified.
+It never suppresses a verification that ran and failed, so an archive that does
+not match its attestation is refused whatever this input is set to.
+
+The GitHub CLI is preinstalled on GitHub-hosted runners. Container jobs and
+some self-hosted runners have to install it, or set `allow-unverified: true`.
+
+[attestations]: https://docs.github.com/en/actions/security-for-github-actions/using-artifact-attestations/using-artifact-attestations-to-establish-provenance-for-builds
 
 ### Example workflow
 

@@ -8,7 +8,9 @@ export async function findRelease(version: string) {
   if (!matchedAsset) {
     throw new Error(`The binary '${assetPrefixes.join("*' or '")}*' not found`)
   }
-  return matchedAsset
+  // The tag is returned alongside the asset because attestation lookup needs a
+  // concrete tag, which 'latest' only becomes once the API has resolved it.
+  return { tag: release.data.tag_name, asset: matchedAsset }
 }
 
 function getRelease(version: string) {
