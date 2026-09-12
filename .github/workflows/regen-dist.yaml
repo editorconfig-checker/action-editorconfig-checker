@@ -33,3 +33,4 @@ jobs:
       - uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: regenerate dist
+          commit_author: ${{ env.bot_author }}
