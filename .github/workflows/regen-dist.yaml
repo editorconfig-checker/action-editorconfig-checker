@@ -1,4 +1,4 @@
-name: regenerate dist after dependabot updates
+name: regenerate dist after version updates
 on:
   pull_request:
     types: [opened, synchronize]
