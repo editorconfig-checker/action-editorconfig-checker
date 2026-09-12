@@ -1,0 +1,13 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["/^action\\.yml$/"],
+      "matchStrings": ["default: (?<currentValue>v\\S+)\\s+required: true"],
+      "depNameTemplate": "editorconfig-checker/editorconfig-checker",
+      "datasourceTemplate": "github-releases",
+    },
+  ],
+}
