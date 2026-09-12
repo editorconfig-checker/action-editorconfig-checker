@@ -10,4 +10,5 @@
       "datasourceTemplate": "github-releases",
     },
   ],
+  "gitIgnoredAuthors": ["41898282+github-actions[bot]@users.noreply.github.com"],
 }
