@@ -17,6 +17,6 @@
       "matchPackageNames": ["typescript"],
       "allowedVersions": "<7"
     },
-  ]
+  ],
   "gitIgnoredAuthors": ["editorconfigchecker@gmail.com"],
 }
