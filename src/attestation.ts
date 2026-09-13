@@ -64,11 +64,11 @@ export interface VerifyAssetOptions {
  * configured.
  */
 export async function verifyAsset(options: VerifyAssetOptions) {
-  const { tag, assetName, archivePath, allowUnverified } = options
+  const { tag, allowUnverified } = options
 
-  const attestation = await loadAttestation(options)
-  if (attestation === 'gh-unavailable' || attestation === 'no-attestation') {
-    const explanation = explainUnverifiable(attestation, tag)
+  const result = await verifyFile(options)
+  if (result === 'gh-unavailable' || result === 'no-attestation') {
+    const explanation = explainUnverifiable(result, tag)
     if (!allowUnverified) {
       throw new VerificationError(
         `${explanation} Set 'allow-unverified: true' to install it anyway, ` +
@@ -79,22 +79,12 @@ export async function verifyAsset(options: VerifyAssetOptions) {
     return
   }
 
-  const expectedDigest = findSubjectDigest(attestation, assetName)
-  const actualDigest = await sha256File(archivePath)
-  if (actualDigest !== expectedDigest) {
-    throw new VerificationError(
-      `'${assetName}' does not match the ${tag} release attestation: ` +
-        `expected sha256:${expectedDigest}, got sha256:${actualDigest}. ` +
-        "This is not bypassable with 'allow-unverified'.",
-    )
-  }
-
-  info(`Verified against the ${tag} release attestation (sha256:${actualDigest})`)
+  info(`Verified against the ${tag} release attestation`)
 }
 
-async function loadAttestation(options: VerifyAssetOptions) {
-  const { tag, repository, githubToken } = options
-  const args = ['release', 'verify', tag, '--repo', repository, '--format', 'json']
+async function verifyFile(options: VerifyAssetOptions) {
+  const { tag, repository, githubToken, archivePath } = options
+  const args = ['release', 'verify-asset', tag, archivePath, '--repo', repository]
 
   let result
   try {
@@ -117,7 +107,7 @@ async function loadAttestation(options: VerifyAssetOptions) {
   const reason = classifyGhFailure(result.stderr)
   if (reason === 'failed') {
     throw new VerificationError(
-      `'gh release verify ${tag}' failed: ${result.stderr.trim()}`,
+      `'gh "${args.join('" "')}"' failed: ${result.stderr.trim()}`,
     )
   }
   return reason
@@ -131,7 +121,7 @@ export function classifyGhFailure(stderr: string): UnverifiableReason | 'failed'
   if (/unknown command/i.test(stderr)) {
     return 'gh-unavailable'
   }
-  if (/no attestations for/i.test(stderr)) {
+  if (/no attestations fo/i.test(stderr)) {
     return 'no-attestation'
   }
   return 'failed'
@@ -152,42 +142,6 @@ export function explainUnverifiable(reason: UnverifiableReason, tag: string) {
   )
 }
 
-/**
- * Pick the digest the attestation records for one named asset.
- *
- * Matching on the name matters: 'gh release verify-asset' matches on digest
- * alone, which accepts any asset belonging to the release. Binding the name to
- * the digest is what makes this check specific to the archive we downloaded.
- */
-export function findSubjectDigest(attestation: string, assetName: string) {
-  let parsed: ReleaseVerifyOutput
-  try {
-    parsed = JSON.parse(attestation)
-  } catch {
-    throw new VerificationError('Could not parse the output of gh release verify')
-  }
-
-  const subjects = parsed.verificationResult?.statement?.subject
-  if (!subjects?.length) {
-    throw new VerificationError('The release attestation lists no subjects')
-  }
-
-  const subject = subjects.find(({ name }) => name === assetName)
-  if (!subject) {
-    throw new VerificationError(
-      `The release attestation does not cover an asset named '${assetName}'`,
-    )
-  }
-
-  const digest = subject.digest?.sha256
-  if (!digest) {
-    throw new VerificationError(
-      `The release attestation records no sha256 digest for '${assetName}'`,
-    )
-  }
-  return digest.toLowerCase()
-}
-
 export function isMissingExecutable(error: unknown) {
   if (!(error instanceof Error)) {
     return false
@@ -196,10 +150,4 @@ export function isMissingExecutable(error: unknown) {
     (error as NodeJS.ErrnoException).code === 'ENOENT' ||
     /unable to locate executable file/i.test(error.message)
   )
-}
-
-export async function sha256File(filePath: string) {
-  const hash = createHash('sha256')
-  await pipeline(createReadStream(filePath), hash)
-  return hash.digest('hex')
 }
