@@ -10,5 +10,13 @@
       "datasourceTemplate": "github-releases",
     },
   ],
+  "packageRules": [
+    {
+      "description": "TypeScript 7 is the Go port and no longer exposes the JavaScript compiler API. @vercel/ncc's ts-loader calls ts.sys.fileExists(), so `npm run build` crashes while bundling every action. Crossread https://github.com/vercel/ncc/issues/1336. Lift this once ncc supports TS 7 or the actions stop being bundled with ncc.",
+      "matchManagers": ["npm"],
+      "matchPackageNames": ["typescript"],
+      "allowedVersions": "<7"
+    },
+  ]
   "gitIgnoredAuthors": ["editorconfigchecker@gmail.com"],
 }

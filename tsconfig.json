@@ -1,9 +1,13 @@
 {
   "compilerOptions": {
     "target": "ES2018",
-    "module": "CommonJS",
-    "moduleResolution": "node",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "strict": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "rootDir": "./src",
+    "types": [
+      "node"
+    ]
   }
 }
