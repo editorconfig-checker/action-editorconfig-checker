@@ -68,7 +68,7 @@ on:
 
 jobs:
   editorconfig:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     steps:
       - name: Check out code
         uses: actions/checkout@v6
