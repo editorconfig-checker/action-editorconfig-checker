@@ -21,7 +21,7 @@ jobs:
       - name: Compare the expected and actual dist/ directories
         run: |
           if [ "$(git diff --ignore-space-at-eol dist/ | wc -l)" -gt "0" ]; then
-            echo "Detected uncommitted changes after build.  See status below:"
+            echo "::error::Detected uncommitted changes after build.  See status below:"
             git diff
             exit 1
           fi
@@ -30,4 +30,54 @@ jobs:
     needs: [dirty]
     steps:
       - uses: actions/checkout@v7
-      - uses: ./
+
+      - name: test with explicit version parameters
+        uses: ./
+        with:
+          version: v3.11.3
+
+      - name: test with old, unsigned version, expecting it to fail
+        id: fail-unsigned-version
+        uses: ./
+        with:
+          version: v3.8.0
+        continue-on-error: true
+      - name: check that fail-unsigned-version actually failed
+        run: |
+          if test "${{ steps.fail-unsigned-version.outcome }}" != 'failure'; then
+            echo "::error::fail-unsigned-version did not fail as expected!"
+            exit 1
+          else
+            echo "fail-unsigned-version failed as expected"
+            exit 0
+          fi
+
+      - name: test with old, unsigned version and allowing unsigned version
+        uses: ./
+        with:
+          version: v3.8.0
+          allow-unverified: true
+
+      - name: ensure that missing assets actually cause an error
+        id: fail-missing-assets
+        uses: ./
+        with:
+          # release 3.9.0 failed to upload assets since we just switched on immutable releases, so it will never have assets
+          version: v3.9.0
+        continue-on-error: true
+      - name: check that fail-missing-assets actually failed
+        run: |
+          if test "${{ steps.fail-missing-assets.outcome }}" != 'failure'; then
+          echo "::error::fail-missing-assets did not fail as expected!"
+            exit 1
+          else
+            echo "fail-missing-assets failed as expected"
+            exit 0
+          fi
+
+      - name: test with default parameters
+        uses: ./
+
+      - name: actually run the last obtained editorconfig-checker binary
+        run: |
+          editorconfig-checker --verbose
