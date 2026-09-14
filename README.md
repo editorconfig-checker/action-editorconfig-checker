@@ -30,11 +30,11 @@ at the cost of the installed binary no longer being determined by your pin.
 
 ### Verification
 
-The downloaded archive is verified against the [GitHub release attestation][attestations]
-for the release it came from, before it is extracted or made executable. The
-action resolves the release tag, asks the GitHub CLI to verify the signed
-attestation for that tag, and checks that the digest the attestation records
-*for that asset name* matches the archive on disk. A mismatch fails the step.
+The downloaded archive is verified against the [GitHub release
+attestation][attestations] for the release it came from, before it is extracted
+or made executable. The action downloads the release archive and before
+extracting verifies with `gh release verify-asset…` that it originated from the
+release that was resolved from the `version` input. A mismatch fails the step.
 
 editorconfig-checker publishes release attestations from `v3.9.0` onwards.
 Installing `v3.8.0` or older, or running on a runner without the GitHub CLI,
