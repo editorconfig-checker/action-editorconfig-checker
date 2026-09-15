@@ -11,6 +11,14 @@ inputs:
     description: EditorConfig Checker Version
     default: v4.0.1
     required: true
+  allow-unverified:
+    description: >-
+      Install a release that cannot be verified against a GitHub release
+      attestation, such as editorconfig-checker v3.8.0 and older, or any
+      version on a runner without the GitHub CLI. A verification that runs and
+      fails is never bypassed by this input.
+    default: 'false'
+    required: false
 
 runs:
   using: node24

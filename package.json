@@ -2,10 +2,12 @@
   "name": "editorconfig-action",
   "private": true,
   "scripts": {
-    "start": "ncc build src/index.ts --minify"
+    "start": "ncc build src/index.ts --minify",
+    "test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --test src/*.test.mts"
   },
   "dependencies": {
     "@actions/core": "^2.0.1",
+    "@actions/exec": "^2.0.0",
     "@actions/github": "^7.0.0",
     "@actions/tool-cache": "^3.0.1"
   },
