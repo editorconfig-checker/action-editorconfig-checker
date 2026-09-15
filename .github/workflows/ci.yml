@@ -62,7 +62,7 @@ jobs:
         id: fail-missing-assets
         uses: ./
         with:
-          # release 3.9.0 failed to upload assets since we just switched on immutable releases, so it will never have assets
+          # release 3.9.0 has no assets (caused by a bug when we introduced immutable releases)
           version: v3.9.0
         continue-on-error: true
       - name: check that fail-missing-assets actually failed
