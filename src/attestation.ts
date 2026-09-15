@@ -1,5 +1,6 @@
 import { info, warning } from '@actions/core'
 import { getExecOutput } from '@actions/exec'
+import type { ExecOptions, ExecOutput } from '@actions/exec'
 
 // This module deliberately imports nothing from the rest of src/. Node's test
 // runner resolves TypeScript imports as ESM, which would require explicit
@@ -36,6 +37,12 @@ export interface VerifyAssetOptions {
   allowUnverified: boolean
 }
 
+type execFunction = (
+  commandLine: string,
+  args?: string[],
+  options?: ExecOptions
+) => Promise<ExecOutput>
+
 /**
  * Verify a downloaded release archive against the GitHub release attestation
  * for its tag, and throw unless it matches.
@@ -64,13 +71,13 @@ export async function verifyAsset(options: VerifyAssetOptions) {
   info(`Verified against the ${tag} release attestation`)
 }
 
-async function verifyFile(options: VerifyAssetOptions) {
+export async function verifyFile(options: VerifyAssetOptions, geo: execFunction = getExecOutput) {
   const { tag, repository, githubToken, archivePath } = options
   const args = ['release', 'verify-asset', tag, archivePath, '--repo', repository]
 
   let result
   try {
-    result = await getExecOutput('gh', args, {
+    result = await geo('gh', args, {
       ignoreReturnCode: true,
       silent: true,
       env: { ...process.env, GH_TOKEN: githubToken } as Record<string, string>,
