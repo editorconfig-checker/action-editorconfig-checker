@@ -22,7 +22,6 @@ async function main() {
   const { owner, repo: repository } = repo({})
   await verifyAsset({
     tag,
-    assetName: asset.name,
     archivePath,
     repository: `${owner}/${repository}`,
     githubToken,

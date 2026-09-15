@@ -1,8 +1,5 @@
 import { info, warning } from '@actions/core'
 import { getExecOutput } from '@actions/exec'
-import { createHash } from 'node:crypto'
-import { createReadStream } from 'node:fs'
-import { pipeline } from 'node:stream/promises'
 
 // This module deliberately imports nothing from the rest of src/. Node's test
 // runner resolves TypeScript imports as ESM, which would require explicit
@@ -26,24 +23,9 @@ export class VerificationError extends Error {
   override name = 'VerificationError'
 }
 
-interface AttestationSubject {
-  name?: string
-  digest?: { sha256?: string }
-}
-
-interface ReleaseVerifyOutput {
-  verificationResult?: {
-    statement?: {
-      subject?: AttestationSubject[]
-    }
-  }
-}
-
 export interface VerifyAssetOptions {
   /** Release tag the asset was downloaded from, already resolved from 'latest'. */
   tag: string
-  /** Asset file name, as published on the release. */
-  assetName: string
   /** Local path of the downloaded archive. */
   archivePath: string
   /** Repository publishing the release, as 'owner/repo'. */
