@@ -113,9 +113,9 @@ export function explainUnverifiable(reason: UnverifiableReason, tag: string) {
   if (reason === 'gh-unavailable') {
     return (
       `Cannot verify ${tag}: the GitHub CLI is unavailable on this runner, or ` +
-      "is too old to support 'gh release verify'. It is preinstalled on " +
-      'GitHub-hosted runners; container jobs and some self-hosted runners have ' +
-      'to install it.'
+      "is older than v2.81.0, where 'gh release verify-asset' landed. It is " +
+      'preinstalled on GitHub-hosted runners; container jobs and some ' +
+      'self-hosted runners have to install it.'
     )
   }
   return (
