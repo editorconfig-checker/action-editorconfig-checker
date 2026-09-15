@@ -1,12 +1,7 @@
 import assert from 'node:assert/strict'
-import { createHash, randomBytes } from 'node:crypto'
-import fs from 'node:fs/promises'
-import os from 'node:os'
-import path from 'node:path'
 import { test } from 'node:test'
 import {
   FIRST_ATTESTED_VERSION,
-  VerificationError,
   classifyGhFailure,
   explainUnverifiable,
   isMissingExecutable,
