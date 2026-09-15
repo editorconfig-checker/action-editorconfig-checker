@@ -15,9 +15,9 @@ function attestation(subjects: unknown[]) {
 
 test('classifyGhFailure separates unverifiable from failed', () => {
   const cases: [string, string][] = [
-    ['unknown command "verify" for "gh release"', 'gh-unavailable'],
+    ['unknown command "verify-asset" for "gh release"', 'gh-unavailable'],
     [
-      'no attestations for tag v3.8.0 (sha1:6fa6539948897d1dceee75b6680d7e9688b5c9e9)',
+      'no attestations found for tag v3.8.0 (sha1:6fa6539948897d1dceee75b6680d7e9688b5c9e9)',
       'no-attestation',
     ],
     ['release not found', 'failed'],

@@ -103,7 +103,7 @@ export function classifyGhFailure(stderr: string): UnverifiableReason | 'failed'
   if (/unknown command/i.test(stderr)) {
     return 'gh-unavailable'
   }
-  if (/no attestations fo/i.test(stderr)) {
+  if (/no attestations found/i.test(stderr)) {
     return 'no-attestation'
   }
   return 'failed'
