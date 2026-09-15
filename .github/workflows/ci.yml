@@ -68,7 +68,7 @@ jobs:
       - name: check that fail-missing-assets actually failed
         run: |
           if test "${{ steps.fail-missing-assets.outcome }}" != 'failure'; then
-          echo "::error::fail-missing-assets did not fail as expected!"
+            echo "::error::fail-missing-assets did not fail as expected!"
             exit 1
           else
             echo "fail-missing-assets failed as expected"
