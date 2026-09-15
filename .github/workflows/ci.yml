@@ -78,6 +78,18 @@ jobs:
       - name: test with default parameters
         uses: ./
 
+      - name: check the version available on the path is the one set as default in action.yaml
+        run: |
+          expected="$(yq .inputs.version.default action.yml)"
+          got="$(editorconfig-checker --version)"
+
+          if test "$expected" != "$got"; then
+            echo "::error::Found editorconfig-checker version $got installed, but was expecting version $expected"
+            exit 1
+          fi
+
+          echo "Found the expected editorconfig-checker version $got installed"
+
       - name: actually run the last obtained editorconfig-checker binary
         run: |
           editorconfig-checker --verbose
